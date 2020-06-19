@@ -1,0 +1,11 @@
+/*Import file for celendar css*/
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+body {
+  background: #d3e4ff;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #6b84aa, #d3e4ff, #d3e4ff);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #6b84aa, #d3e4ff, #d3e4ff);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
