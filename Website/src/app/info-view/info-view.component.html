@@ -1,0 +1,126 @@
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{use.FirstName}} {{use.LastName}}</h4>
+    <button type="button" class="close btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <form (ngSubmit)="updateUser()" #form="ngForm">
+      <dl class="row">
+        <dt class="col-md-3">Phone Number: </dt>
+        <dd class="col-md-9">{{use.PhoneNum}} <span *ngIf="use.Extension != null">Ext.
+            {{use.Extension}}</span></dd>
+
+        <dt class="col-md-3">Email: </dt>
+        <dd class="col-md-9"><a href="mailto:{{use.Email}}">{{use.Email}}</a></dd>
+
+
+        <dt class="col-md-3">Active:</dt>
+        <dd class="col-md-9">
+          <select class="custom-select" id="option" [(ngModel)]="use.isActive" name="active">
+            <option value="true">True</option>
+            <option value="false">False</option>
+          </select>
+        </dd>
+
+
+        <dt class="col-md-3">Hours Volunteered: </dt>
+        <dd class="col-md-9">
+          <input class="form-control" type="number" min="0" step="0.75" value="use.TotalHoursVolunteered"
+            [(ngModel)]="use.TotalHoursVolunteered" name="TotalHoursVolunteered">
+        </dd>
+
+
+        <dt class="col-md-3">
+          Role:
+        </dt>
+        <dd class="col-md-9">
+          <select class="custom-select" id="option" [(ngModel)]="use.Role._id" name="Role">
+            <option *ngFor="let role of roles" value="{{role._id}}">{{role.RoleName}}</option>
+          </select>
+        </dd>
+
+        <dd class="col-md-12">
+          <button class="btn-success btn float-right" type="submit" (click)="UpdateUser()">Update</button>
+        </dd>
+      </dl>
+    </form>
+  </div>
+
+</ng-template>
+
+<div class="container fluid">
+  <div class="card">
+    <div class="card-header">
+      <app-secondary-navbar></app-secondary-navbar>
+    </div>
+    <div class="card-body">
+      <h3>Volunteer Information</h3>
+      <hr />
+
+      <!-- Event filtering -->
+      <div class="filtering mt-3">
+        <!-- Search -->
+        <h3 class="mt-3 text-center">Filter</h3>
+        <div class="input-group mb-3 mt-3">
+
+          <!-- Magnifying Glass -->
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="option"><i class="fas fa-search"></i></label>
+          </div>
+          <!-- Search -->
+          <input type="text" class="form-control" placeholder="Enter a users name" [(ngModel)]="search">
+        </div>
+
+
+
+        <ul class="list-group">
+          <li class="list-group-item" *ngFor="let volunteer of volunteerFilter | searchFilter : search : options">
+            <div class="ml-3 mr-3">
+              <p class="d-none">{{volunteer._id}}</p>
+              <h4>{{volunteer.FirstName}} {{volunteer.LastName}}</h4>
+              <hr>
+              <dl class="row">
+                <dt class="col-md-3">Phone Number: </dt>
+                <dd class="col-md-9"><span *ngIf="volunteer.PhoneNum == null">N/A</span> {{volunteer.PhoneNum}} <span
+                    *ngIf="volunteer.Extension != null">Ext.
+                    {{volunteer.Extension}}</span></dd>
+
+                <dt class="col-md-3">Email: </dt>
+                <dd class="col-md-9"><a href="mailto:{{volunteer.Email}}">{{volunteer.Email}}</a></dd>
+
+
+                <dt class="col-md-3">Active:</dt>
+                <dd class="col-md-9">
+                  {{volunteer.isActive}}
+                </dd>
+
+
+                <dt class="col-md-3">Hours Volunteered: </dt>
+                <dd class="col-md-9">
+                  {{volunteer.TotalHoursVolunteered}}
+                </dd>
+
+
+                <dt class="col-md-3">
+                  Role:
+                </dt>
+                <dd class="col-md-9">
+                  {{volunteer.Role.RoleName}}
+                </dd>
+
+                <dd class="col-md-12">
+                  <button class="btn-primary btn float-right" (click)="UpdateUserRequest(volunteer)">Update</button>
+                </dd>
+              </dl>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+    </div>
+  </div>
+</div>

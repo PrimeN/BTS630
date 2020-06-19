@@ -1,0 +1,6 @@
+<ul class="nav nav-tabs card-header-tabs">
+  <li routerLinkActive='active'><a class="nav-link" routerLink="/profile">Profile</a></li>
+  <li routerLinkActive='active'><a class="nav-link" routerLink="/profile/edit">Edit Profile</a></li>
+  <li routerLinkActive='active'><a class="nav-link" routerLink="/schedule">My Schedule</a></li>
+  <li *ngIf=(token) routerLinkActive='active'><a class="nav-link" routerLink="/information">Contact Information</a></li>
+</ul>

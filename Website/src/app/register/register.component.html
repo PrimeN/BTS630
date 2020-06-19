@@ -1,0 +1,116 @@
+<div class="container">
+  <div class="row">
+    <div class="col-lg-10 col-xl-9 mx-auto">
+      <div class="card card-signin flex-row my-5">
+        <div class="card-img-left d-none d-md-flex">
+          <!-- Background image for card set in CSS! -->
+        </div>
+        <div class="card-body">
+          <h5 class="card-title text-center">Register</h5>
+          <form (ngSubmit)='onSubmit(pass1.value, pass2.value, f.value)' #f='ngForm'>
+
+            <div class="row">
+              <div class="col-md-12 pr-1">
+                <div class="form-label-group">
+                  <input type="email" class="form-control" placeholder="Email" [(ngModel)]="use.Email" name="Email"
+                    ng-required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-label-group">
+                  <input type="password" name="Password" #pass1 [(ngModel)]="use.Password" class="form-control"
+                    placeholder="Password" ng-required>
+                </div>
+              </div>
+
+              <div class="col-md-6 pl-1">
+                <div class="form-label-group">
+                  <input type="password" name="Password2" #pass2 class="form-control" placeholder="Please re-enter your Password"
+                    ng-required>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-label-group">
+                  <input type="text" class="form-control" name="FirstName" [(ngModel)]="use.FirstName" placeholder="First Name"
+                    ng-required>
+                </div>
+              </div>
+              <div class="col-md-6 pl-1">
+                <div class="form-label-group">
+                  <input type="text" class="form-control" placeholder="Last Name" name="LastName" [(ngModel)]="use.LastName"
+                    ng-required>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-label-group">
+                  <input type="text" class="form-control" placeholder="Home Address" name="HomeAddress" [(ngModel)]="use.AddressStreet"
+                    ng-required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-label-group">
+                  <input type="text" class="form-control" placeholder="City" name="AddressCity" [(ngModel)]="use.AddressCity"
+                    ng-required>
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-label-group">
+
+                  <input type="text" class="form-control" placeholder="Country" name="AddressCountry" [(ngModel)]="use.AddressCountry"
+                    ng-required>
+                </div>
+              </div>
+              <div class="col-md-4 pl-1">
+                <div class="form-label-group">
+                  <input type="text" class="form-control" placeholder="ZIP Code" name="AddressZip" [(ngModel)]="use.AddressZip"
+                    ng-required>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 pr-1">
+                    <div class="form-label-group">
+                      <input type="text" class="form-control" placeholder="Province" name="AddressProvince" [(ngModel)]="use.AddressProvince"
+                        ng-required>
+                    </div>
+                  </div>
+              <div class="col-md-4 px-1">
+                <div class="form-label-group">
+                  <input type="tel" class="form-control" name="PhoneNum" [(ngModel)]="use.PhoneNum" placeholder="Phone Number"
+                    ng-required>
+                </div>
+              </div>
+              <div class="col-md-4 pl-1">
+                <div class="form-label-group">
+                  <input type="tel" class="form-control" placeholder="Phone Extension" name="Extension" [(ngModel)]="use.Extension">
+                </div>
+              </div>
+            </div>
+
+            <hr>
+            <div class="alert alert-danger" *ngIf="registerError">
+              {{registerError}}
+            </div>
+            <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit" [disabled]='!f.form.valid'>Register</button>
+
+            <a class="d-block text-center mt-2 small" routerLink="/login">Or Sign In if You Have an Account</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

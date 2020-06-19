@@ -1,0 +1,94 @@
+<div class="container">
+
+  <div class="card">
+    <div class="card-header">
+      <app-secondary-navbar></app-secondary-navbar>
+    </div>
+    <div class="card-body">
+
+      <h5 class="card-title">User Details:
+        {{ use.FirstName }} {{ use.LastName }}</h5>
+
+
+      <hr>
+      <dl class="dl-horizontal">
+
+        <div class="row">
+          <div class="col-md-4 pr-1">
+            <dt>First name:</dt>
+            <dd>
+              {{ use.FirstName }}
+            </dd>
+          </div>
+          <div class="col-md-4 px-1">
+            <dt>Last name:</dt>
+            <dd>
+              {{ use.LastName }}
+            </dd>
+          </div>
+          <div class="col-md-4 pl-1">
+            <dt>Email Address:</dt>
+            <dd>
+              {{use.Email}}
+            </dd>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 pr-1">
+            <dt>Address:</dt>
+            <dd>
+              {{ use.AddressStreet }}
+              <br>
+              {{use.AddressZip }}, {{ use.AddressCity }}, {{ use.AddressProvince }}
+            </dd>
+          </div>
+
+          <div class="col-md-4 pl-1">
+            <dt>Phone Number:</dt>
+            <dd>
+              {{use.PhoneNum}}
+              <br>
+              Ext. {{use.Extension}}
+            </dd>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4 pr-1">
+            <dt>Role:</dt>
+            <dd>
+              {{ use.Role.RoleName }}
+            </dd>
+          </div>
+
+          <div class="col-md-4 pl-1">
+            <dt>Hours Volunteered:</dt>
+            <dd>
+              {{use.TotalHoursVolunteered}}
+            </dd>
+          </div>
+          <div class="col-md-4 pl-1">
+            <dt>Is Active:</dt>
+            <dd>
+              Yes
+            </dd>
+
+          </div>
+        </div>
+
+      </dl>
+
+      <div class="row">
+        <div class="col-md-2">
+          <button class="btn btn-lg btn-default text-uppercase pull-right" (click)='goBack()'>Go Back</button>
+        </div>
+
+        <div class="col-md-2">
+          <button class="btn btn-lg btn-warning text-uppercase pull-right" routerLink="/profile/edit">Edit Profile</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>

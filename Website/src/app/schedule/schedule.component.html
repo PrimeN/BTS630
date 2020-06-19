@@ -1,0 +1,309 @@
+<context-menu #basicMenu>
+  <ng-template contextMenuItem (execute)="addEvent($event.item)">
+    Add event
+  </ng-template>
+</context-menu>
+
+<ng-template #monthCellTemplate let-day="day" let-openDay="openDay" let-locale="locale" let-tooltipPlacement="tooltipPlacement"
+  let-highlightDay="highlightDay" let-unhighlightDay="unhighlightDay" let-eventClicked="eventClicked">
+  <div class="fill-height" [contextMenu]="basicMenu" [contextMenuSubject]="day.date">
+    <div class="cal-cell-top">
+      <span class="cal-day-badge" *ngIf="day.badgeTotal > 0">{{ day.badgeTotal }}</span>
+      <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+    </div>
+
+    <div class="cal-events">
+      <div class="cal-event" *ngFor="let event of day.events" [style.backgroundColor]="event.color.primary" [ngClass]="event?.cssClass"
+        (mouseenter)="highlightDay.emit({event: event})" (mouseleave)="unhighlightDay.emit({event: event})"
+        [mwlCalendarTooltip]="event.title | calendarEventTitle:'monthTooltip':event" [tooltipPlacement]="tooltipPlacement"
+        (click)="$event.stopPropagation(); eventClicked.emit({event: event})"></div>
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+
+
+
+
+<ng-template #defaultTemplate2 let-events="events" let-eventClicked="eventClicked" let-isOpen="isOpen">
+  <div class="cal-open-day-events" *ngIf="isOpen">
+    <div *ngFor="let event of events; trackBy: trackByEventId" [ngClass]="event?.cssClass" mwlDraggable
+      [class.cal-draggable]="event.draggable" dragActiveClass="cal-drag-active" [dropData]="{ event: event }"
+      [dragAxis]="{ x: event.draggable, y: event.draggable }">
+      <span class="cal-event" [style.backgroundColor]="event.color?.primary">
+      </span>
+
+      <mwl-calendar-event-title [event]="event" [customTemplate]="eventTitleTemplate" view="month" (mwlClick)="eventClicked.emit({ event: event })">
+      </mwl-calendar-event-title>
+
+
+      <mwl-calendar-event-actions [event]="event" [customTemplate]="eventActionsTemplate">
+      </mwl-calendar-event-actions>
+    </div>
+
+    <span class="cal-event">
+      <button class="btn btn-success" (click)="addEvent(events[0].start)">Add Event</button>
+    </span>
+  </div>
+
+</ng-template>
+
+
+
+
+
+
+
+
+<ng-template #weekHeaderTemplate let-days="days" let-locale="locale" let-dayHeaderClicked="dayHeaderClicked">
+  <div class="cal-day-headers">
+    <div class="cal-header" *ngFor="let day of days" [class.cal-past]="day.isPast" [class.cal-today]="day.isToday"
+      [class.cal-future]="day.isFuture" [class.cal-weekend]="day.isWeekend" (click)="dayHeaderClicked.emit({day: day})"
+      [contextMenu]="basicMenu" [contextMenuSubject]="day.date">
+      <b>{{ day.date | calendarDate:'weekViewColumnHeader':locale }}</b><br />
+      <span>{{ day.date | calendarDate:'weekViewColumnSubHeader':locale }}</span>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #dayHourSegmentTemplate let-segment="segment" let-locale="locale">
+  <div class="cal-hour-segment" [ngClass]="segment.cssClass" [contextMenu]="basicMenu" [contextMenuSubject]="segment.date">
+    <div [hidden]="!segment.isStart" class="cal-time">
+      {{ segment.date | calendarDate:'dayViewHour':locale }}
+    </div>
+  </div>
+</ng-template>
+<div class="container">
+
+  <div class="card">
+
+    <!-- Internal Navigation -->
+    <div class="card-header">
+      <app-secondary-navbar></app-secondary-navbar>
+    </div>
+
+
+    <div class="card-body">
+
+      <!-- Sechedule -->
+      <div class="schedule">
+        <!-- Modal -->
+        <ng-template #content let-modal *ngIf="token">
+          <div class="modal-header">
+            <h4 class="modal-title">Event</h4>
+            <button type="button" class="close btn btn-light" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="createNewActivity()" #form="ngForm">
+
+              <!-- Class Name-->
+              <div class="form-group">
+                <label class="control-label" for="title">Class Name:</label>
+                <input type="text" name="title" class="form-control" required [(ngModel)]="class.ClassTitle" autofocus
+                  placeholder="3 to 50 characters" pattern='.{3,}' maxlength="50">
+              </div>
+
+              <!-- Class Description -->
+              <div class="form-group">
+                <label class="control-label" for="description">Class Description:</label>
+                <textarea name="description" [(ngModel)]="class.ClassDescription" class="form-control" rows="3"
+                  placeholder="Enter event description"></textarea>
+              </div>
+
+              <!--Start & End Date/Time; Color-->
+              <div class="row">
+                <!-- Start -->
+                <div class="col-4">
+                  <div class="form-group">
+                    <label class="control-label" for="startDate">Start:</label><br>
+                    <input type="datetime" mwlFlatpickr class="form-control" [(ngModel)]="class.ClassStart" name="startDate"
+                      [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i"
+                      placeholder="Not set" required>
+                  </div>
+                </div>
+
+                <!-- End -->
+                <div class="col-4">
+                  <div class="form-group">
+                    <label class="control-label" for="endDate">End:</label><br>
+                    <input type="datetime" mwlFlatpickr class="form-control" [(ngModel)]="class.ClassEnd" name="endDate"
+                      [altInput]="true" [convertModelValue]="true" [enableTime]="true" dateFormat="Y-m-dTH:i" altFormat="F j, Y H:i"
+                      placeholder="Not set" required>
+                  </div>
+                </div>
+
+                <!-- Color Identifier -->
+                <div class="col-4">
+                  <div class="form-group">
+                    <label class="control-label" for="color">Color:</label><br>
+                    <input type="color" class="form-control" value="#ad2121" [(ngModel)]="class.ClassColor" name="color">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Team Leader & Volunteers -->
+              <div class="row">
+                <!-- Volunteers -->
+                <div class="col">
+                  <div class="form-group">
+                    <label class="control-label" for="volunteers">Volunteers:</label><br>
+                    <select class="form-control" name="volunteers" multiple required size="5" [(ngModel)]="class.Volunteers">
+                      <option *ngFor="let a of userDisplay" [value]="a._id">{{a.FirstName}} {{a.LastName}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Class Leader -->
+                <div class="col">
+                  <div class="form-group">
+                    <label class="control-label" for="classLead">Class Leader:</label><br>
+                    <select class="form-control" name="classLead" required size="1" [(ngModel)]="class.ClassLead">
+                      <option *ngFor="let a of userDisplay" [value]="a._id">{{a.FirstName}} {{a.LastName}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="alert alert-danger" *ngIf="eventSuccessfullyAdded">
+                {{eventSuccessfullyAdded}}
+              </div>
+
+              <span *ngIf="!class._id">
+                <button class="btn btn-success float-right" [disabled]='!form.form.valid' type="submit">Create</button>
+              </span>
+              <span *ngIf="class._id">
+                <button class="btn btn-primary float-right" [disabled]='!form.form.valid' (click)="update()">Update</button>
+                <button class="btn btn-danger float-right mr-3" (click)="delete()">Delete</button>
+              </span>
+            </form>
+
+
+          </div>
+        </ng-template>
+
+        <!-- Calendar View Navigation Buttons -->
+        <div class="row text-center">
+          <div class="col">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate"
+                (viewDateChange)="activeDayIsOpen = false">
+                Previous
+              </button>
+              <button type="button" class="btn btn-primary" mwlCalendarToday [(viewDate)]="viewDate">
+                Today
+              </button>
+              <button type="button" class="btn btn-primary" mwlCalendarNextView [view]="view" [(viewDate)]="viewDate"
+                (viewDateChange)="activeDayIsOpen = false">
+                Next
+              </button>
+            </div>
+          </div>
+          <div class="col">
+            <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+          </div>
+          <div class="col">
+            <div class="btn-group">
+              <button type="button" class="btn btn-primary" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
+                Month
+              </button>
+              <button type="button" class="btn btn-primary" (click)="view = CalendarView.Week" [class.active]="view === CalendarView.Week">
+                Week
+              </button>
+              <button type="button" class="btn btn-primary" (click)="view = CalendarView.Day" [class.active]="view === CalendarView.Day">
+                Day
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Open Add Event Modal -->
+        <div class="row text-center justify-content-end" *ngIf="token">
+          <div class="col-md-4">
+            <button type="button" class="btn btn-success" (click)="openAddEventModal()">Add Event</button>
+          </div>
+        </div>
+        <br>
+
+        <!-- Calendar View -->
+        <div [ngSwitch]="view">
+          <mwl-calendar-month-view *ngSwitchCase="CalendarView.Month" [cellTemplate]="monthCellTemplate" [viewDate]="viewDate"
+            [events]="events" [refresh]="refresh" [activeDayIsOpen]="activeDayIsOpen" (dayClicked)="dayClicked($event.day)"
+            (eventTimesChanged)="eventTimesChanged($event)" (eventClicked)="eventClicked($event)"
+            [openDayEventsTemplate]="defaultTemplate2">
+          </mwl-calendar-month-view>
+          <mwl-calendar-week-view *ngSwitchCase="CalendarView.Week" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+            (eventTimesChanged)="eventTimesChanged($event)" (eventClicked)="eventClicked($event)">
+          </mwl-calendar-week-view>
+          <mwl-calendar-day-view *ngSwitchCase="CalendarView.Day" [viewDate]="viewDate" [events]="events" [refresh]="refresh"
+            (eventTimesChanged)="eventTimesChanged($event)" (eventClicked)="eventClicked($event)">
+          </mwl-calendar-day-view>
+        </div>
+
+
+      </div>
+
+
+      <!-- Event filtering -->
+      <div *ngIf="token" class="filtering mt-3">
+        <!-- Search -->
+        <h3 class="mt-3 text-center">Filter</h3>
+        <div class="input-group mb-3 mt-3">
+
+          <!-- Magnifying Glass -->
+          <div class="input-group-prepend">
+            <label class="input-group-text" for="option"><i class="fas fa-search"></i></label>
+          </div>
+          <!-- Search -->
+          <input type="text" class="form-control" placeholder="Enter the search parameter" [(ngModel)]="search">
+
+          <!-- Search options -->
+          <div class="input-group-append">
+            <select class="custom-select" id="option" [(ngModel)]="options">
+              <option value="1" selected>Event Name</option>
+              <option value="2">Volunteer Name</option>
+            </select>
+          </div>
+        </div>
+
+
+
+        <ul>
+          <li *ngFor="let event of eventsFilter | searchFilter : search : options">
+            <div class="ml-3 mr-3">
+              <h4 [ngStyle]="{'color': event.ClassColor}">{{event.ClassTitle}}</h4>
+              <dl class="row">
+                <dt class="col-md-3">Class Leader</dt>
+                <dd class="col-md-9">{{event.ClassLead.FirstName}} {{event.ClassLead.LastName}}</dd>
+
+                <dt class="col-md-3">Class Start Time</dt>
+                <dd class="col-md-9">{{event.ClassStart | date:'medium' }}</dd>
+
+                <dt class="col-md-3">Class End Time</dt>
+                <dd class="col-md-9">{{event.ClassEnd | date:'medium' }}</dd>
+
+                <dt class="col-md-3">Volunteers</dt>
+                <dd class="col-md-9"><span *ngFor="let volunteer of event.Volunteers">{{volunteer.FirstName}}
+                    {{volunteer.LastName}}<br></span></dd>
+
+                <dt *ngIf="event.ClassDescription != ''" class="col-md-3">Description</dt>
+                <dd *ngIf="event.ClassDescription != ''" class="col-md-9">{{event.ClassDescription}}</dd>
+
+                <dd class="col-md-12">
+                  <button class="btn-primary btn float-right" (click)="ViewEvent(event._id)">Update</button>
+                </dd>
+              </dl>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+
+    </div>
+  </div>
+
+</div>
